@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nafaka 1 Estate – Manager Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ── uses the same design tokens as style.css ── */
+        :root {
+            --primary:       #1a3c5e;
+            --primary-light: #2563a8;
+            --accent:        #00b4d8;
+            --success:       #27ae60;
+            --danger:        #e74c3c;
+            --bg:            #f0f4f8;
+            --sidebar-bg:    #0f2744;
+            --text-primary:  #1a2e44;
+            --text-secondary:#6b7c93;
+            --border:        #dce3ec;
+            --card-bg:       #ffffff;
+            --shadow:        0 2px 16px rgba(26,60,94,0.08);
+            --shadow-lg:     0 8px 32px rgba(26,60,94,0.14);
+            --radius:        12px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%; width: 100%;
+            font-family: 'DM Sans', sans-serif;
+            overflow: hidden;
+        }
+
+        /* ═══════════════════════════════════════════ */
+        /*  FULL-PAGE SPLIT                            */
+        /* ═══════════════════════════════════════════ */
+        .login-page {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* ─── LEFT PANEL ─── */
+        .left-panel {
+            flex: 1.1;
+            background: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle animated rings */
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(0,180,216,0.12);
+            animation: expandRing 7s ease-out infinite;
+            pointer-events: none;
+        }
+        .ring:nth-child(1){ width:220px; height:220px; top:8%;  left:8%;  animation-delay:0s; }
+        .ring:nth-child(2){ width:380px; height:380px; top:2%;  left:2%;  animation-delay:1.2s; }
+        .ring:nth-child(3){ width:540px; height:540px; top:-4%; left:-4%; animation-delay:2.4s; }
+        .ring:nth-child(4){ width:180px; height:180px; bottom:12%; right:6%; animation-delay:0.6s; }
+        .ring:nth-child(5){ width:320px; height:320px; bottom:6%; right:0%;  animation-delay:1.8s; }
+
+        @keyframes expandRing {
+            0%   { opacity:0.7; transform:scale(0.94); }
+            100% { opacity:0;   transform:scale(1.07); }
+        }
+
+        /* Floating drops */
+        .drop {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.1;
+            animation: floatUp 9s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .drop:nth-child(6)  { top:18%; left:20%; animation-delay:0s;   font-size:20px; }
+        .drop:nth-child(7)  { top:50%; left:12%; animation-delay:2.5s; font-size:32px; }
+        .drop:nth-child(8)  { top:72%; left:50%; animation-delay:5s;   font-size:16px; }
+        .drop:nth-child(9)  { top:30%; left:68%; animation-delay:1.2s; font-size:26px; }
+        .drop:nth-child(10) { top:78%; left:28%; animation-delay:3.5s; font-size:22px; }
+
+        @keyframes floatUp {
+            0%,100% { transform: translateY(0)   rotate(0deg); }
+            50%      { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* Left content */
+        .left-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: #fff;
+            max-width: 360px;
+        }
+
+        .left-emblem {
+            width: 96px; height: 96px;
+            background: linear-gradient(135deg, var(--accent), #0077b6);
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin: 0 auto 1.75rem;
+            box-shadow: 0 8px 32px rgba(0,180,216,0.35);
+            animation: popIn 0.7s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+
+        @keyframes popIn {
+            from { opacity:0; transform:scale(0.4); }
+            to   { opacity:1; transform:scale(1); }
+        }
+
+        .left-eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .left-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.25;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .left-sub {
+            font-size: 13px;
+            color: rgba(168,196,224,0.85);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+        }
+
+        .left-divider {
+            width: 44px; height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            margin: 0 auto 2.25rem;
+            border-radius: 2px;
+        }
+
+        /* Feature list */
+        .features {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius);
+            padding: 13px 16px;
+            animation: slideInLeft 0.5s ease both;
+        }
+        .feature:nth-child(1){ animation-delay:0.3s; }
+        .feature:nth-child(2){ animation-delay:0.45s; }
+        .feature:nth-child(3){ animation-delay:0.6s; }
+
+        @keyframes slideInLeft {
+            from { opacity:0; transform:translateX(-18px); }
+            to   { opacity:1; transform:translateX(0); }
+        }
+
+        .feature-icon { font-size: 18px; flex-shrink:0; }
+        .feature-label { font-size: 13px; color: rgba(168,196,224,0.9); }
+        .feature-label strong {
+            display: block;
+            font-weight: 600;
+            font-size: 13.5px;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        /* ─── RIGHT PANEL ─── */
+        .right-panel {
+            flex: 0.9;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2.5rem;
+            overflow-y: auto;
+        }
+
+        .form-wrap {
+            width: 100%;
+            max-width: 400px;
+            animation: slideInRight 0.55s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+        }
+
+        @keyframes slideInRight {
+            from { opacity:0; transform:translateX(20px); }
+            to   { opacity:1; transform:translateX(0); }
+        }
+
+        /* Welcome text above card */
+        .form-intro { margin-bottom: 1.75rem; }
+
+        .form-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(0,180,216,0.1);
+            color: var(--primary-light);
+            border: 1px solid rgba(0,180,216,0.25);
+            border-radius: 30px;
+            padding: 5px 14px;
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            margin-bottom: 1rem;
+        }
+
+        .badge-dot {
+            width: 7px; height: 7px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0%,100% { box-shadow: 0 0 0 2px rgba(39,174,96,0.25); }
+            50%      { box-shadow: 0 0 0 6px rgba(39,174,96,0.08); }
+        }
+
+        .form-intro h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .form-intro p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Card */
+        .form-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            padding: 2rem 1.75rem;
+            border: 1px solid var(--border);
+        }
+
+        /* Error */
+        .error-box {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: #fdf3f2;
+            border: 1px solid #f5c6c6;
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-size: 13px;
+            color: var(--danger);
+            margin-bottom: 1.25rem;
+        }
+        .error-box.show {
+            display: flex;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%,100%{transform:translateX(0)}
+            20%    {transform:translateX(-5px)}
+            40%    {transform:translateX(5px)}
+            60%    {transform:translateX(-3px)}
+            80%    {transform:translateX(3px)}
+        }
+
+        /* Form groups — same label style as style.css modals */
+        .f-group { margin-bottom: 1.2rem; }
+
+        .f-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .f-input-wrap { position: relative; }
+
+        .f-icon {
+            position: absolute;
+            left: 13px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 15px;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .f-input {
+            width: 100%;
+            height: 46px;
+            padding: 0 14px 0 40px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--text-primary);
+            background: var(--bg);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+        .f-input::placeholder { color: #b0bec5; }
+        .f-input:focus {
+            border-color: var(--accent);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(0,180,216,0.1);
+        }
+        .f-input.pw { padding-right: 60px; }
+
+        .pw-toggle {
+            position: absolute;
+            right: 11px; top: 50%;
+            transform: translateY(-50%);
+            background: none; border: none;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px; font-weight: 600;
+            color: var(--text-secondary);
+            padding: 4px 6px; border-radius: 6px;
+            transition: color 0.15s;
+        }
+        .pw-toggle:hover { color: var(--accent); }
+
+        /* Submit — matches btn-primary from style.css */
+        .submit-btn {
+            width: 100%;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 12px rgba(37,99,168,0.3);
+            transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+            position: relative; overflow: hidden;
+        }
+        .submit-btn::after {
+            content:'';
+            position:absolute; inset:0;
+            background: linear-gradient(120deg,transparent 30%,rgba(255,255,255,0.18) 50%,transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.55s;
+        }
+        .submit-btn:hover:not(:disabled)::after { transform: translateX(100%); }
+        .submit-btn:hover:not(:disabled) {
+            opacity: 0.92;
+            box-shadow: 0 6px 16px rgba(37,99,168,0.4);
+            transform: translateY(-1px);
+        }
+        .submit-btn:active:not(:disabled) { transform: scale(0.985); }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .spinner {
+            display: inline-block;
+            width: 15px; height: 15px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin { to{ transform:rotate(360deg); } }
+
+        .secure-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            margin-top: 1.25rem;
+            font-size: 12px;
+            color: #b0bec5;
+        }
+        .secure-dot { width:6px; height:6px; border-radius:50%; background:var(--success); flex-shrink:0; }
+
+        /* ─── SUCCESS STATE ─── */
+        .success-view { display:none; }
+        .success-view.show { display:block; }
+
+        .success-ring {
+            width: 68px; height: 68px;
+            background: linear-gradient(135deg, var(--success), #1a9950);
+            border-radius: 50%;
+            display: flex; align-items:center; justify-content:center;
+            font-size: 32px; color: #fff;
+            margin: 0 auto 1.25rem;
+            box-shadow: 0 6px 24px rgba(39,174,96,0.35);
+            animation: popIn 0.45s cubic-bezier(0.34,1.56,0.64,1);
+        }
+
+        .success-view h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 21px; color: var(--text-primary);
+            text-align:center; margin-bottom: 8px;
+        }
+        .success-view p {
+            font-size: 14px; color: var(--text-secondary);
+            text-align:center; margin-bottom: 1.75rem; line-height:1.6;
+        }
+
+        .go-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 48px;
+            background: linear-gradient(135deg, var(--success), #1a9950);
+            color: #fff;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14.5px; font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(39,174,96,0.3);
+            transition: opacity 0.2s, transform 0.15s;
+        }
+        .go-btn:hover { opacity:0.88; transform:translateY(-1px); }
+
+        .progress-bar {
+            height: 3px; background: var(--border);
+            border-radius: 99px; margin-top: 1.5rem; overflow:hidden;
+        }
+        .progress-fill {
+            height:100%;
+            background: linear-gradient(90deg, var(--success), var(--accent));
+            border-radius:99px;
+            animation: fillBar 2.5s linear forwards;
+        }
+        @keyframes fillBar { from{width:0%} to{width:100%} }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .left-panel { display: none; }
+            .right-panel { flex:1; background:#fff; padding:2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-page">
+
+    <!-- ════════════════════════════════════ -->
+    <!--  LEFT PANEL                          -->
+    <!-- ════════════════════════════════════ -->
+    <div class="left-panel">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="drop">💧</div>
+        <div class="drop">💧</div>
+        <div class="drop">💧</div>
+        <div class="drop">💧</div>
+        <div class="drop">💧</div>
+
+        <div class="left-content">
+            <div class="left-emblem">💧</div>
+            <div class="left-eyebrow">Nafaka 1 Estate · Milimani</div>
+            <div class="left-title">Water Billing<br>System</div>
+            <div class="left-sub">Management Portal</div>
+            <div class="left-divider"></div>
+
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">📊</span>
+                    <div class="feature-label">
+                        <strong>Live Dashboard</strong>
+                        Track bills, arrears &amp; payments in real time
+                    </div>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">📟</span>
+                    <div class="feature-label">
+                        <strong>Meter Management</strong>
+                        Record &amp; monitor tenant meter readings
+                    </div>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">📄</span>
+                    <div class="feature-label">
+                        <strong>Invoice Generation</strong>
+                        Generate &amp; download PDF invoices instantly
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!--  RIGHT PANEL                         -->
+    <!-- ════════════════════════════════════ -->
+    <div class="right-panel">
+        <div class="form-wrap">
+
+            <div class="form-intro">
+                <div class="form-badge">
+                    <div class="badge-dot"></div>
+                    Manager Access Only
+                </div>
+                <h1>Welcome back 👋</h1>
+                <p>Sign in to manage the estate water billing system</p>
+            </div>
+
+            <!-- LOGIN FORM CARD -->
+            <div class="form-card" id="loginForm">
+
+                <div class="error-box" id="errorBox">
+                    <span>⚠️</span>
+                    <span id="errorText">Invalid username or password.</span>
+                </div>
+
+                <div class="f-group">
+                    <label for="username">Username</label>
+                    <div class="f-input-wrap">
+                        <span class="f-icon">👤</span>
+                        <input type="text" id="username" class="f-input"
+                               placeholder="Enter your username"
+                               autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="f-group">
+                    <label for="password">Password</label>
+                    <div class="f-input-wrap">
+                        <span class="f-icon">🔑</span>
+                        <input type="password" id="password" class="f-input pw"
+                               placeholder="Enter your password"
+                               autocomplete="current-password">
+                        <button class="pw-toggle" type="button" id="pwBtn" onclick="togglePw()">Show</button>
+                    </div>
+                </div>
+
+                <button class="submit-btn" id="loginBtn" onclick="handleLogin()">
+                    Sign In
+                </button>
+
+                <div class="secure-note">
+                    <div class="secure-dot"></div>
+                    Secured connection · Authorised personnel only
+                </div>
+            </div>
+
+            <!-- SUCCESS VIEW -->
+            <div class="success-view" id="successView">
+                <div class="form-card">
+                    <div class="success-ring">✓</div>
+                    <h3>Access Granted!</h3>
+                    <p>Welcome back, Manager!<br>Loading your dashboard now...</p>
+                    <a href="index.html" class="go-btn">Go to Dashboard →</a>
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // ── Already logged in? Skip straight to dashboard ──
+    if (sessionStorage.getItem('nafaka_auth_token')) {
+        window.location.replace('index.html');
+    }
+
+    async function handleLogin() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const btn      = document.getElementById('loginBtn');
+        const errBox   = document.getElementById('errorBox');
+        const errText  = document.getElementById('errorText');
+
+        errBox.classList.remove('show');
+
+        if (!username || !password) {
+            errText.textContent = 'Please enter both username and password.';
+            errBox.classList.add('show');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span>Signing in...';
+
+        try {
+            const res = await fetch('http://localhost:8085/auth/login', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ username, password })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                sessionStorage.setItem('nafaka_auth_token', data.token);
+                sessionStorage.setItem('nafaka_username',   data.username || username);
+
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('successView').classList.add('show');
+                setTimeout(() => { window.location.href = 'index.html'; }, 2500);
+
+            } else {
+                const msg = await res.text();
+                errText.textContent = msg || 'Invalid username or password. Please try again.';
+                errBox.classList.add('show');
+                document.getElementById('password').value = '';
+                btn.disabled = false;
+                btn.innerHTML = 'Sign In';
+            }
+        } catch (e) {
+            errText.textContent = 'Cannot reach server. Is your backend running on port 8085?';
+            errBox.classList.add('show');
+            btn.disabled = false;
+            btn.innerHTML = 'Sign In';
+        }
+    }
+
+    function togglePw() {
+        const input = document.getElementById('password');
+        const btn   = document.getElementById('pwBtn');
+        input.type  = input.type === 'password' ? 'text' : 'password';
+        btn.textContent = input.type === 'password' ? 'Show' : 'Hide';
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Enter') handleLogin();
+    });
+</script>
+
+</body>
+</html>

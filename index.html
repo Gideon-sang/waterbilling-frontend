@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nafaka 1 Estate – Milimani Water Billing System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Logout button sits naturally in sidebar footer */
+        .logout-btn {
+            width: 100%;
+            margin-top: 12px;
+            padding: 10px 0;
+            background: rgba(231,76,60,0.12);
+            color: #e74c3c;
+            border: 1px solid rgba(231,76,60,0.25);
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.2px;
+        }
+        .logout-btn:hover {
+            background: rgba(231,76,60,0.22);
+            border-color: rgba(231,76,60,0.45);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  SIDEBAR                                -->
+    <!-- ═══════════════════════════════════════ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">💧</div>
+                <div>
+                    <div class="logo-title">Nafaka 1 Estate</div>
+                    <div class="logo-sub">Milimani Water Billing</div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" onclick="showPage('dashboard')">
+                <span class="nav-icon">📊</span> Dashboard
+            </a>
+            <a href="#" class="nav-item" onclick="showPage('members')">
+                <span class="nav-icon">👥</span> Members
+            </a>
+            <a href="#" class="nav-item" onclick="showPage('readings')">
+                <span class="nav-icon">📟</span> Meter Readings
+            </a>
+            <a href="#" class="nav-item" onclick="showPage('bills')">
+                <span class="nav-icon">🧾</span> Bills & Payments
+            </a>
+            <a href="#" class="nav-item" onclick="showPage('invoices')">
+                <span class="nav-icon">📄</span> Invoices
+            </a>
+            <a href="#" class="nav-item" onclick="showPage('reports')">
+                <span class="nav-icon">📈</span> Arrears Report
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-footer-text">Water Billing v1.0</div>
+            <button class="logout-btn" onclick="logout()">
+                🚪 Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  MAIN CONTENT                           -->
+    <!-- ═══════════════════════════════════════ -->
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="date-badge" id="currentDate"></div>
+            </div>
+        </header>
+
+        <!-- ─────────────────────────────────── -->
+        <!--  DASHBOARD PAGE                     -->
+        <!-- ─────────────────────────────────── -->
+        <div id="page-dashboard" class="page active">
+
+            <!-- Stats Row -->
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="totalMembers">0</div>
+                        <div class="stat-label">Total Members</div>
+                    </div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="paidBills">0</div>
+                        <div class="stat-label">Paid Bills</div>
+                    </div>
+                </div>
+                <div class="stat-card red">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="arrearsCount">0</div>
+                        <div class="stat-label">Members in Arrears</div>
+                    </div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="totalUnpaid">0</div>
+                        <div class="stat-label">Total Unpaid (KES)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two-column tables -->
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Recent Bills</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Member</th>
+                                    <th>Amount (KES)</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentBillsBody">
+                                <tr><td colspan="4" class="loading">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Members in Arrears</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>House No</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="arrearsBody">
+                                <tr><td colspan="3" class="loading">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─────────────────────────────────── -->
+        <!--  MEMBERS PAGE                       -->
+        <!-- ─────────────────────────────────── -->
+        <div id="page-members" class="page">
+            <div class="page-actions">
+                <button class="btn btn-primary" onclick="openModal('addMemberModal')">+ Add Member</button>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>All Members</h2>
+                    <input type="text" class="search-input" placeholder="Search members..." oninput="searchMembers(this.value)">
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>House No</th>
+                                <th>Meter No</th>
+                                <th>Phone</th>
+                                <th>Last Reading</th>
+                                <th>Arrears</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="membersBody">
+                            <tr><td colspan="8" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─────────────────────────────────── -->
+        <!--  METER READINGS PAGE                -->
+        <!-- ─────────────────────────────────── -->
+        <div id="page-readings" class="page">
+            <div class="page-actions">
+                <button class="btn btn-primary" onclick="openModal('addReadingModal')">+ Add Reading</button>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Meter Readings</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Previous Reading</th>
+                                <th>Current Reading</th>
+                                <th>Units Used</th>
+                                <th>Reading Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="readingsBody">
+                            <tr><td colspan="5" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─────────────────────────────────── -->
+        <!--  BILLS & PAYMENTS PAGE              -->
+        <!-- ─────────────────────────────────── -->
+        <div id="page-bills" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2>All Bills</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Units Used</th>
+                                <th>Amount (KES)</th>
+                                <th>Arrears (KES)</th>
+                                <th>Bill Date</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billsBody">
+                            <tr><td colspan="8" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─────────────────────────────────── -->
+        <!--  INVOICES PAGE                      -->
+        <!-- ─────────────────────────────────── -->
+        <div id="page-invoices" class="page">
+            <div class="page-actions">
+                <div class="input-group">
+                    <input type="number" id="invoiceMemberId" placeholder="Enter Member ID" class="input" style="width:200px">
+                    <button class="btn btn-primary" onclick="generateInvoice()">Generate Invoice</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>All Invoices</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Invoice No</th>
+                                <th>Member</th>
+                                <th>Current Charges</th>
+                                <th>Arrears</th>
+                                <th>Total Amount</th>
+                                <th>Date</th>
+                                <th>Due Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoicesBody">
+                            <tr><td colspan="8" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─────────────────────────────────── -->
+        <!--  ARREARS REPORT PAGE                -->
+        <!-- ─────────────────────────────────── -->
+        <div id="page-reports" class="page">
+            <div class="page-actions">
+                <a href="http://localhost:8085/reports/arrears/pdf" target="_blank" class="btn btn-danger">
+                    📥 Download Arrears Report PDF
+                </a>
+            </div>
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 style="color:#e74c3c">⚠️ Members in Arrears</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>House No</th>
+                                    <th>Meter No</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportArrearsBody">
+                                <tr><td colspan="4" class="loading">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 style="color:#27ae60">✅ Members Up To Date</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>House No</th>
+                                    <th>Meter No</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportUpToDateBody">
+                                <tr><td colspan="4" class="loading">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main><!-- end .main -->
+
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  MODALS                                 -->
+    <!-- ═══════════════════════════════════════ -->
+
+    <!-- Add Member -->
+    <div id="addMemberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Member</h2>
+                <button class="modal-close" onclick="closeModal('addMemberModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="memberName" class="input" placeholder="e.g. John Doe">
+                </div>
+                <div class="form-group">
+                    <label>House Number</label>
+                    <input type="text" id="memberHouse" class="input" placeholder="e.g. H12">
+                </div>
+                <div class="form-group">
+                    <label>Meter Number</label>
+                    <input type="text" id="memberMeter" class="input" placeholder="e.g. MTR102">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="memberPhone" class="input" placeholder="e.g. 0712345678">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addMemberModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addMember()">Add Member</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Reading -->
+    <div id="addReadingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Meter Reading</h2>
+                <button class="modal-close" onclick="closeModal('addReadingModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Member ID</label>
+                    <input type="number" id="readingMemberId" class="input" placeholder="Enter Member ID">
+                </div>
+                <div class="form-group">
+                    <label>Current Reading</label>
+                    <input type="number" id="currentReading" class="input" placeholder="Enter current meter reading">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addReadingModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addReading()">Submit Reading</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Member -->
+    <div id="editMemberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Member</h2>
+                <button class="modal-close" onclick="closeModal('editMemberModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editMemberId">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="editMemberName" class="input">
+                </div>
+                <div class="form-group">
+                    <label>House Number</label>
+                    <input type="text" id="editMemberHouse" class="input">
+                </div>
+                <div class="form-group">
+                    <label>Meter Number</label>
+                    <input type="text" id="editMemberMeter" class="input">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="editMemberPhone" class="input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editMemberModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="updateMember()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  SCRIPTS — auth guard FIRST            -->
+    <!-- ═══════════════════════════════════════ -->
+    <script src="auth-guard.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>

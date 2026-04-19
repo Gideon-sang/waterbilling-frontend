@@ -1,5 +1,5 @@
 // ===== API BASE URL =====
-const API = 'http://waterbilling-backend-production.up.railway.app';
+const API = 'https://waterbilling-backend-production.up.railway.app';
  
 // ===== SHARED STATE =====
 // ✅ Single source of truth for all data

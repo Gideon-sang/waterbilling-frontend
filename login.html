@@ -611,7 +611,7 @@
         btn.innerHTML = '<span class="spinner"></span>Signing in...';
 
         try {
-            const res = await fetch('http://localhost:8085/auth/login', {
+            const res = await fetch('https://waterbilling-backend-production.up.railway.app/auth/login', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify({ username, password })

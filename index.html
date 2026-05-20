@@ -7,14 +7,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Logout button sits naturally in sidebar footer */
         .logout-btn {
             width: 100%;
             margin-top: 12px;
             padding: 10px 0;
-            background: rgba(231,76,60,0.12);
-            color: #e74c3c;
-            border: 1px solid rgba(231,76,60,0.25);
+            background: rgba(245,197,24,0.12);
+            color: #7a6000;
+            border: 1px solid rgba(245,197,24,0.35);
             border-radius: 10px;
             font-family: 'DM Sans', sans-serif;
             font-size: 13px;
@@ -28,8 +27,8 @@
             letter-spacing: 0.2px;
         }
         .logout-btn:hover {
-            background: rgba(231,76,60,0.22);
-            border-color: rgba(231,76,60,0.45);
+            background: rgba(245,197,24,0.25);
+            border-color: rgba(245,197,24,0.6);
         }
     </style>
 </head>
@@ -229,10 +228,11 @@
                                 <th>Current Reading</th>
                                 <th>Units Used</th>
                                 <th>Reading Date</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="readingsBody">
-                            <tr><td colspan="5" class="loading">Loading...</td></tr>
+                            <tr><td colspan="6" class="loading">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -417,6 +417,27 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal('addReadingModal')">Cancel</button>
                 <button class="btn btn-primary" onclick="addReading()">Submit Reading</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ FIX 2: Edit Reading Modal — added here -->
+    <div id="editReadingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Meter Reading</h2>
+                <button class="modal-close" onclick="closeModal('editReadingModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editReadingId">
+                <div class="form-group">
+                    <label>Corrected Current Reading</label>
+                    <input type="number" id="editCurrentReading" class="input" placeholder="Enter correct meter reading">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editReadingModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="updateReading()">Save Changes</button>
             </div>
         </div>
     </div>

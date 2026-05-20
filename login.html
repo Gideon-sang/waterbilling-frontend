@@ -8,19 +8,19 @@
     <style>
         /* ── uses the same design tokens as style.css ── */
         :root {
-            --primary:       #1a3c5e;
-            --primary-light: #2563a8;
-            --accent:        #00b4d8;
+            --primary:       #1a5c2a;
+            --primary-light: #2e7d32;
+            --accent:        #f5c518;
             --success:       #27ae60;
             --danger:        #e74c3c;
-            --bg:            #f0f4f8;
-            --sidebar-bg:    #0f2744;
-            --text-primary:  #1a2e44;
-            --text-secondary:#6b7c93;
-            --border:        #dce3ec;
+            --bg:            #f1f7f2;
+            --sidebar-bg:    #0d3318;
+            --text-primary:  #1a2e1e;
+            --text-secondary:#5a7262;
+            --border:        #ccddd2;
             --card-bg:       #ffffff;
-            --shadow:        0 2px 16px rgba(26,60,94,0.08);
-            --shadow-lg:     0 8px 32px rgba(26,60,94,0.14);
+            --shadow:        0 2px 16px rgba(26,92,42,0.08);
+            --shadow-lg:     0 8px 32px rgba(26,92,42,0.14);
             --radius:        12px;
         }
 
@@ -58,7 +58,7 @@
         .ring {
             position: absolute;
             border-radius: 50%;
-            border: 1px solid rgba(0,180,216,0.12);
+            border: 1px solid rgba(245,197,24,0.18);
             animation: expandRing 7s ease-out infinite;
             pointer-events: none;
         }
@@ -103,14 +103,14 @@
 
         .left-emblem {
             width: 96px; height: 96px;
-            background: linear-gradient(135deg, var(--accent), #0077b6);
+            background: linear-gradient(135deg, var(--accent), #c9a200);
             border-radius: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 48px;
             margin: 0 auto 1.75rem;
-            box-shadow: 0 8px 32px rgba(0,180,216,0.35);
+            box-shadow: 0 8px 32px rgba(245,197,24,0.35);
             animation: popIn 0.7s cubic-bezier(0.34,1.56,0.64,1) both;
         }
 
@@ -139,7 +139,7 @@
 
         .left-sub {
             font-size: 13px;
-            color: rgba(168,196,224,0.85);
+            color: rgba(168,210,180,0.85);
             letter-spacing: 1px;
             text-transform: uppercase;
             margin-bottom: 2.5rem;
@@ -180,7 +180,7 @@
         }
 
         .feature-icon { font-size: 18px; flex-shrink:0; }
-        .feature-label { font-size: 13px; color: rgba(168,196,224,0.9); }
+        .feature-label { font-size: 13px; color: rgba(168,210,180,0.9); }
         .feature-label strong {
             display: block;
             font-weight: 600;
@@ -218,9 +218,9 @@
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            background: rgba(0,180,216,0.1);
-            color: var(--primary-light);
-            border: 1px solid rgba(0,180,216,0.25);
+            background: rgba(245,197,24,0.12);
+            color: #7a6000;
+            border: 1px solid rgba(245,197,24,0.4);
             border-radius: 30px;
             padding: 5px 14px;
             font-size: 11.5px;
@@ -289,7 +289,7 @@
             80%    {transform:translateX(3px)}
         }
 
-        /* Form groups — same label style as style.css modals */
+        /* Form groups */
         .f-group { margin-bottom: 1.2rem; }
 
         .f-group label {
@@ -330,7 +330,7 @@
         .f-input:focus {
             border-color: var(--accent);
             background: #fff;
-            box-shadow: 0 0 0 3px rgba(0,180,216,0.1);
+            box-shadow: 0 0 0 3px rgba(245,197,24,0.2);
         }
         .f-input.pw { padding-right: 60px; }
 
@@ -348,7 +348,7 @@
         }
         .pw-toggle:hover { color: var(--accent); }
 
-        /* Submit — matches btn-primary from style.css */
+        /* Submit */
         .submit-btn {
             width: 100%;
             height: 48px;
@@ -361,7 +361,7 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 0.5rem;
-            box-shadow: 0 4px 12px rgba(37,99,168,0.3);
+            box-shadow: 0 4px 12px rgba(26,92,42,0.3);
             transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
             position: relative; overflow: hidden;
         }
@@ -375,7 +375,7 @@
         .submit-btn:hover:not(:disabled)::after { transform: translateX(100%); }
         .submit-btn:hover:not(:disabled) {
             opacity: 0.92;
-            box-shadow: 0 6px 16px rgba(37,99,168,0.4);
+            box-shadow: 0 6px 16px rgba(26,92,42,0.4);
             transform: translateY(-1px);
         }
         .submit-btn:active:not(:disabled) { transform: scale(0.985); }
@@ -648,7 +648,7 @@
         input.type  = input.type === 'password' ? 'text' : 'password';
         btn.textContent = input.type === 'password' ? 'Show' : 'Hide';
     }
-
+s
     document.addEventListener('keydown', e => {
         if (e.key === 'Enter') handleLogin();
     });
